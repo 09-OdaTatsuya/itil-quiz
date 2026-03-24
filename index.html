@@ -377,6 +377,7 @@
 
 <div class="choices" id="choicesArea" style="display:none"></div>
 
+<div id="resultBanner" style="display:none;"></div>
 <div class="explanation" id="explanation">
   <div class="explanation-label">解説</div>
   <div id="explanationText"></div>
@@ -1907,17 +1908,28 @@ function renderQuestion() {
   const expEl = document.getElementById('explanation');
   expEl.classList.remove('show');
   document.getElementById('btnNext').disabled = true;
+  document.getElementById('resultBanner').style.display = 'none';
 
   if (answered[current]) {
     const ua = userAnswers[current];
     const correctAns = q.answer;
+    const correct = ua === correctAns;
     const btns = area.querySelectorAll('.choice-btn');
     btns.forEach(btn => {
       const lbl = btn.querySelector('.choice-label').textContent;
       btn.disabled = true;
       if (lbl === correctAns) btn.classList.add('correct');
-      else if (lbl === ua && ua !== correctAns) btn.classList.add('wrong');
+      else if (lbl === ua && !correct) btn.classList.add('wrong');
     });
+    // バナー復元
+    const banner = document.getElementById('resultBanner');
+    if (correct) {
+      banner.innerHTML = '⭕&nbsp;&nbsp;正解！';
+      banner.style.cssText = 'display:block;padding:14px 20px;border-radius:12px;font-size:17px;font-weight:700;margin-bottom:14px;text-align:center;background:rgba(61,214,140,0.15);color:#1a9e5c;border:1.5px solid #3dd68c;';
+    } else {
+      banner.innerHTML = '❌&nbsp;&nbsp;不正解&nbsp;&nbsp;正解は&nbsp;<span style="font-size:20px">' + correctAns + '</span>';
+      banner.style.cssText = 'display:block;padding:14px 20px;border-radius:12px;font-size:17px;font-weight:700;margin-bottom:14px;text-align:center;background:rgba(245,91,91,0.12);color:#c0392b;border:1.5px solid #f55b5b;';
+    }
     document.getElementById('explanationText').textContent = q.explanation;
     expEl.classList.add('show');
     document.getElementById('btnNext').disabled = false;
@@ -1943,6 +1955,16 @@ function selectAnswer(label, clickedBtn) {
     if (lbl === q.answer) btn.classList.add('correct');
     else if (lbl === label && !correct) btn.classList.add('wrong');
   });
+
+  // 正解・不正解バナーを表示
+  const banner = document.getElementById('resultBanner');
+  if (correct) {
+    banner.innerHTML = '⭕&nbsp;&nbsp;正解！';
+    banner.style.cssText = 'display:block;padding:14px 20px;border-radius:12px;font-size:17px;font-weight:700;margin-bottom:14px;text-align:center;background:rgba(61,214,140,0.15);color:#1a9e5c;border:1.5px solid #3dd68c;';
+  } else {
+    banner.innerHTML = '❌&nbsp;&nbsp;不正解&nbsp;&nbsp;正解は&nbsp;<span style="font-size:20px">' + q.answer + '</span>';
+    banner.style.cssText = 'display:block;padding:14px 20px;border-radius:12px;font-size:17px;font-weight:700;margin-bottom:14px;text-align:center;background:rgba(245,91,91,0.12);color:#c0392b;border:1.5px solid #f55b5b;';
+  }
 
   document.getElementById('explanationText').textContent = q.explanation;
   document.getElementById('explanation').classList.add('show');
