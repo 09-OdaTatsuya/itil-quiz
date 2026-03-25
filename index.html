@@ -330,24 +330,24 @@
   <div class="mode-title">学習モードを選択</div>
   <div class="mode-sub">全120問（模擬試験1：問題001〜060 / 模擬試験2：問題061〜120）</div>
   <div class="mode-buttons">
-    <button class="mode-btn" onclick="startQuiz('all')">
+    <button class="mode-btn" onclick="startQuiz('set1')">
       <div>
-        <div>全問チャレンジ</div>
-        <div class="mode-btn-sub">120問すべてに取り組む</div>
+        <div>セット 1　<span style="font-size:12px;color:#5b8af5;" id="save_set1"></span></div>
+        <div class="mode-btn-sub">問題001〜040（40問）</div>
       </div>
       <div class="mode-btn-arrow">→</div>
     </button>
-    <button class="mode-btn" onclick="startQuiz('exam1')">
+    <button class="mode-btn" onclick="startQuiz('set2')">
       <div>
-        <div>模擬試験 1</div>
-        <div class="mode-btn-sub">問題001〜060（60問）</div>
+        <div>セット 2　<span style="font-size:12px;color:#5b8af5;" id="save_set2"></span></div>
+        <div class="mode-btn-sub">問題041〜080（40問）</div>
       </div>
       <div class="mode-btn-arrow">→</div>
     </button>
-    <button class="mode-btn" onclick="startQuiz('exam2')">
+    <button class="mode-btn" onclick="startQuiz('set3')">
       <div>
-        <div>模擬試験 2</div>
-        <div class="mode-btn-sub">問題061〜120（60問）</div>
+        <div>セット 3　<span style="font-size:12px;color:#5b8af5;" id="save_set3"></span></div>
+        <div class="mode-btn-sub">問題081〜120（40問）</div>
       </div>
       <div class="mode-btn-arrow">→</div>
     </button>
@@ -1859,16 +1859,70 @@ function shuffle(arr) {
   return a;
 }
 
+let currentMode = '';
+
+function saveProgress() {
+  if (!currentMode || currentMode === 'random') return;
+  const data = { current, score, answered, userAnswers };
+  try { localStorage.setItem('itil_progress_' + currentMode, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadProgress(mode) {
+  try {
+    const raw = localStorage.getItem('itil_progress_' + mode);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+
+function clearProgress(mode) {
+  try { localStorage.removeItem('itil_progress_' + mode); } catch(e) {}
+}
+
+function updateSaveLabels() {
+  ['set1','set2','set3'].forEach(mode => {
+    const el = document.getElementById('save_' + mode);
+    if (!el) return;
+    const saved = loadProgress(mode);
+    if (saved && saved.answered && saved.answered.filter(Boolean).length > 0) {
+      const done = saved.answered.filter(Boolean).length;
+      const total = saved.answered.length;
+      el.textContent = done >= total ? '✓ 完了' : ('▶ ' + done + '/' + total + ' 再開');
+    } else {
+      el.textContent = '';
+    }
+  });
+}
+
 function startQuiz(mode) {
-  if (mode === 'all') questions = [...ALL_QUESTIONS];
-  else if (mode === 'exam1') questions = ALL_QUESTIONS.slice(0, 60);
-  else if (mode === 'exam2') questions = ALL_QUESTIONS.slice(60, 120);
+  currentMode = mode;
+  if (mode === 'set1') questions = ALL_QUESTIONS.slice(0, 40);
+  else if (mode === 'set2') questions = ALL_QUESTIONS.slice(40, 80);
+  else if (mode === 'set3') questions = ALL_QUESTIONS.slice(80, 120);
   else if (mode === 'random') questions = shuffle(ALL_QUESTIONS).slice(0, 20);
 
-  current = 0;
-  score = 0;
-  answered = new Array(questions.length).fill(false);
-  userAnswers = new Array(questions.length).fill(null);
+  // 進捗を復元するか確認
+  const saved = mode !== 'random' ? loadProgress(mode) : null;
+  if (saved && saved.answered && saved.answered.filter(Boolean).length > 0) {
+    const done = saved.answered.filter(Boolean).length;
+    const total = questions.length;
+    if (done < total) {
+      // 途中の場合は復元
+      current = saved.current || 0;
+      score = saved.score || 0;
+      answered = saved.answered;
+      userAnswers = saved.userAnswers;
+    } else {
+      // 完了済みの場合はリセット
+      clearProgress(mode);
+      current = 0; score = 0;
+      answered = new Array(questions.length).fill(false);
+      userAnswers = new Array(questions.length).fill(null);
+    }
+  } else {
+    current = 0; score = 0;
+    answered = new Array(questions.length).fill(false);
+    userAnswers = new Array(questions.length).fill(null);
+  }
 
   document.getElementById('modeScreen').style.display = 'none';
   document.getElementById('resultScreen').classList.remove('show');
@@ -1969,6 +2023,7 @@ function selectAnswer(label, clickedBtn) {
   document.getElementById('explanationText').textContent = q.explanation;
   document.getElementById('explanation').classList.add('show');
   document.getElementById('btnNext').disabled = false;
+  saveProgress();
 }
 
 function goNext() {
@@ -2009,6 +2064,7 @@ function showResult() {
   document.getElementById('resultSub').textContent =
     `正解率 ${pct}%（合格ライン：65%）`;
 
+  clearProgress(currentMode);
   document.getElementById('resultScreen').classList.add('show');
 }
 
@@ -2022,7 +2078,11 @@ function showMode() {
   document.getElementById('explanation').classList.remove('show');
   document.getElementById('scoreNum').textContent = '0';
   document.getElementById('totalNum').textContent = '0';
+  updateSaveLabels();
 }
+
+// 起動時にラベルを更新
+window.addEventListener('load', updateSaveLabels);
 </script>
 </body>
 </html>
