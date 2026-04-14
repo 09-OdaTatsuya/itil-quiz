@@ -4,53 +4,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>ITIL 4 DITS 模擬試験（60問）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f2f5;color:#333;line-height:1.6}
-.container{max-width:800px;margin:0 auto;padding:20px}
-h1{text-align:center;color:#1a237e;margin-bottom:10px;font-size:1.6em}
-.subtitle{text-align:center;color:#666;margin-bottom:20px;font-size:0.95em}
-.mode-select{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:20px 0}
-.mode-btn{padding:16px 24px;border:2px solid #1a237e;border-radius:12px;background:#fff;color:#1a237e;font-size:1em;font-weight:bold;cursor:pointer;transition:all .2s;flex:1;min-width:160px;text-align:center}
-.mode-btn:hover{background:#1a237e;color:#fff}
-.progress-bar{width:100%;height:8px;background:#e0e0e0;border-radius:4px;margin:16px 0;overflow:hidden}
-.progress-fill{height:100%;background:linear-gradient(90deg,#1a237e,#3f51b5);border-radius:4px;transition:width .3s}
-.question-area{background:#fff;border-radius:16px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.08);margin:16px 0}
-.q-number{font-size:.85em;color:#888;margin-bottom:6px}
-.q-text{font-size:1.05em;font-weight:600;margin-bottom:20px;line-height:1.7}
+:root{--bg:#0f1117;--surface:#1a1d27;--surface2:#232736;--border:#2e3347;--accent:#5b8af5;--accent2:#7c5bf5;--correct:#3dd68c;--wrong:#f55b5b;--text:#e8eaf0;--text2:#8b91a8;--text3:#5c6278}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px 60px}
+.container{max-width:760px;width:100%;margin:0 auto}
+h1{text-align:center;font-family:'DM Mono',monospace;font-size:13px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.subtitle{text-align:center;color:var(--text2);margin-bottom:20px;font-size:0.85em}
+.mode-select{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.mode-btn{padding:18px 24px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface2);color:var(--text);font-size:15px;font-weight:bold;cursor:pointer;transition:all .15s;text-align:left;display:flex;justify-content:space-between;align-items:center}
+.mode-btn:hover{border-color:var(--accent);background:var(--surface)}
+.mode-btn small{font-size:12px;color:var(--text3);font-weight:400;display:block;margin-top:3px}
+.progress-bar{height:4px;background:var(--surface2);border-radius:4px;margin:16px 0;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .4s ease}
+.question-area{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:32px;margin:16px 0;animation:fadeIn .3s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.q-number{font-family:'DM Mono',monospace;font-size:12px;color:var(--accent);letter-spacing:.08em;margin-bottom:14px}
+.q-text{font-size:16px;font-weight:600;margin-bottom:20px;line-height:1.8;white-space:pre-wrap}
 .choices{display:flex;flex-direction:column;gap:10px}
-.choice-btn{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border:2px solid #e0e0e0;border-radius:10px;background:#fafafa;cursor:pointer;transition:all .15s;text-align:left;font-size:.95em;line-height:1.5}
-.choice-btn:hover{border-color:#3f51b5;background:#e8eaf6}
-.choice-btn.selected{border-color:#1a237e;background:#c5cae9}
-.choice-btn.correct{border-color:#2e7d32;background:#c8e6c9}
-.choice-btn.wrong{border-color:#c62828;background:#ffcdd2}
-.choice-label{font-weight:bold;color:#1a237e;min-width:24px}
-.explanation{margin-top:18px;padding:16px;background:#fff3e0;border-left:4px solid #ff9800;border-radius:0 8px 8px 0;display:none;font-size:.92em;line-height:1.7}
+.choice-btn{display:flex;align-items:flex-start;gap:12px;padding:16px 20px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface);cursor:pointer;transition:all .15s ease;text-align:left;font-size:15px;line-height:1.6;color:var(--text)}
+.choice-btn:hover:not(:disabled){border-color:var(--accent);background:var(--surface2);transform:translateX(3px)}
+.choice-btn.selected{border-color:var(--accent);background:var(--surface2)}
+.choice-btn.correct{border-color:var(--correct);background:rgba(61,214,140,.08)}
+.choice-btn.correct .choice-label{color:var(--correct)}
+.choice-btn.wrong{border-color:var(--wrong);background:rgba(245,91,91,.08)}
+.choice-btn.wrong .choice-label{color:var(--wrong)}
+.choice-btn:disabled{cursor:default}
+.choice-label{font-family:'DM Mono',monospace;font-size:13px;color:var(--accent);min-width:20px;padding-top:1px}
+.explanation{margin-top:18px;padding:20px 24px;background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:12px;display:none;font-size:14px;line-height:1.8;color:var(--text2);animation:fadeIn .3s ease}
 .explanation.show{display:block}
-.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:10px}
-.nav-btn{padding:10px 28px;border:none;border-radius:8px;font-size:1em;font-weight:bold;cursor:pointer;transition:all .15s}
-.nav-btn.primary{background:#1a237e;color:#fff}
-.nav-btn.primary:hover{background:#0d1257}
-.nav-btn.secondary{background:#e0e0e0;color:#333}
-.nav-btn.secondary:hover{background:#bdbdbd}
-.result-screen{text-align:center;padding:40px 20px;display:none}
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:12px}
+.nav-btn{flex:1;padding:14px 20px;border-radius:12px;border:none;font-family:'Noto Sans JP',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s ease}
+.nav-btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.nav-btn.primary:hover{opacity:.88;transform:translateY(-1px)}
+.nav-btn.secondary{background:var(--surface2);border:1.5px solid var(--border);color:var(--text2)}
+.nav-btn.secondary:hover{border-color:var(--accent);color:var(--text)}
+.nav-btn:disabled{opacity:.35;cursor:default;transform:none}
+.result-screen{text-align:center;padding:48px 32px;background:var(--surface);border:1px solid var(--border);border-radius:16px;display:none;animation:fadeIn .4s ease}
 .result-screen.show{display:block}
-.score-display{font-size:3em;font-weight:bold;margin:20px 0}
-.score-display.pass{color:#2e7d32}
-.score-display.fail{color:#c62828}
-.result-msg{font-size:1.2em;margin-bottom:20px}
+.score-display{font-family:'DM Mono',monospace;font-size:64px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:24px 0}
+.score-display.pass{background:linear-gradient(135deg,var(--correct),#2e7d32);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.score-display.fail{background:linear-gradient(135deg,var(--wrong),#c62828);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.result-msg{font-size:16px;color:var(--text2);margin-bottom:20px}
+@media(max-width:600px){.question-area{padding:22px 18px}.q-text{font-size:14px}.choice-btn{font-size:14px;padding:14px 16px}.score-display{font-size:48px}}
 .glossary-section{margin-top:30px}
-.glossary-toggle{width:100%;padding:14px;background:#1a237e;color:#fff;border:none;border-radius:10px;font-size:1em;font-weight:bold;cursor:pointer;margin-bottom:8px}
-.glossary-content{display:none;background:#fff;border-radius:0 0 10px 10px;padding:16px;max-height:500px;overflow-y:auto;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.glossary-toggle{width:100%;padding:18px 24px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface2);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .15s ease;text-align:left;margin-bottom:8px}
+.glossary-toggle:hover{border-color:var(--accent);background:var(--surface)}
+.glossary-content{display:none;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;max-height:500px;overflow-y:auto}
 .glossary-content.show{display:block}
-.glossary-search{width:100%;padding:10px;border:2px solid #e0e0e0;border-radius:8px;font-size:.95em;margin-bottom:12px}
-.glossary-item{padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:.9em}
-.glossary-item .term{font-weight:bold;color:#1a237e}
-.glossary-item .en{color:#888;font-size:.85em}
-.glossary-item .def{color:#555;margin-top:2px}
-.status-bar{display:flex;justify-content:space-between;align-items:center;font-size:.85em;color:#888;margin-bottom:8px}
+.glossary-search{width:100%;padding:10px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px;outline:none;margin-bottom:16px}
+.glossary-search:focus{border-color:var(--accent)}
+.glossary-item{padding:12px 0;border-bottom:1px solid var(--border);font-size:.9em}
+.glossary-item .term{font-weight:bold;color:var(--accent);font-size:14px}
+.glossary-item .en{color:var(--text3);font-size:11px;margin-left:6px}
+.glossary-item .def{color:var(--text2);margin-top:2px;font-size:13px;line-height:1.7}
+.status-bar{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:8px}
 .hidden{display:none!important}
-.save-indicator{position:fixed;top:10px;right:10px;background:#2e7d32;color:#fff;padding:6px 14px;border-radius:20px;font-size:.8em;opacity:0;transition:opacity .3s}
+.save-indicator{position:fixed;top:10px;right:10px;background:var(--correct);color:#fff;padding:6px 14px;border-radius:20px;font-size:.8em;opacity:0;transition:opacity .3s}
 .save-indicator.show{opacity:1}
 </style>
 </head>
@@ -118,7 +126,7 @@ const QUESTIONS=[
 {n:12,t:"組織がデジタル技術の使用を通じてビジョンをどのように達成するかを定義し伝達する方法を説明する用語はどれですか？",c:["デジタル組織","デジタル・トランスフォーメーション","デジタル戦略","デジタル・ビジネス"],a:2,e:"正解：C（デジタル戦略）。『目標と目的を達成するためにデジタル技術を使用することに基づく事業戦略。』（参照：2.7.2, 2.7.1）"},
 {n:13,t:"ある組織はビジネスを成長させたいと考えています。リスクを管理しコストを抑えながら効率的にサービスを提供する改善プログラムを実施済み。<br>バランスのとれた戦略のために他に何を考慮すべきですか？",c:["運用をモニタリングし管理する方法","運用を改善する方法","新しい市場や顧客に対応する方法","効率を高めるために異なる方法で作業する方法"],a:2,e:"正解：C。内向き（オペレーショナル・エクセレンス）が強いので外向き（顧客/市場の関連性）が必要。『一部の組織は外向きに目を向け、どの市場に対応するか？成長やディスラプションの機会はあるか？と問います。』（参照：3.2.3）"},
 {n:14,t:"デジタル組織の『リスク管理』プラクティスに含めるべきものはどれですか？<br>1. リスクに基づいたターゲット・アーキテクチャの開発<br>2. すべてのリスクを低減するための措置の確保<br>3. リスク管理カルチャの奨励<br>4. リスク管理のためのガバナンスの確保",c:["1と2","2と3","3と4","1と4"],a:2,e:"正解：C（3と4）。リスク管理プラクティスのPSFには『リスク管理のガバナンスの確立』と『リスク管理カルチャの育成とリスクの識別』が含まれる。1=アーキテクチャ管理。2=すべてのリスク低減は不適切（受容・回避・共有・低減がある）。（参照：リスク管理プラクティス 2.4, 11.11）"},
-{n:15,t:"不安定なビジネス環境で頻繁にディスラプションに直面する組織。リーダーは不利な事象にもかかわらず運営・進化する能力を向上させたい。<br>注力すべき側面は？",c:["組織のアジリティ","組織のレジリエンス","ムダの排除","ワークフローの改善"],a:1,e:"正解：B（組織のレジリエンス）。『内外の不利な事象を予見し、準備し、対応し、克服する組織の能力。』C、D=リーン（参照：8.1.2.2）"},
+{n:15,t:"不安定なビジネス環境で頻繁にディスラプションに直面する組織。リーダーは不利な事象にもかかわらず運営・進化する能力を向上させたい。<br>注力すべき側面は？",c:["組織のアジリティ","対障害弾力性","ムダの排除","ワークフローの改善"],a:1,e:"正解：B（対障害弾力性）。『内外の不利な事象を予見し、準備し、対応し、克服する組織の能力。』C、D=リーン（参照：8.1.2.2）"},
 {n:16,t:"安全で使いやすいビデオ通信サービスが多くの市場・複数の業界で広く採用され、ウェビナー等の専門サービスも置き換えている。<br>競合他社の視点でこのサービス・プロバイダが行っていることを最もよく説明する用語は？",c:["業界のディスラプション","市場のディスラプション","エコシステム・ディスラプション","組織のディスラプション"],a:2,e:"正解：C（エコシステム・ディスラプション）。複数の市場・業界にまたがる変化。『デジタル技術が複数の業界と市場の組織にインパクトを与える変化をもたらすとき発生。』（参照：3.1.1）"},
 {n:17,t:"多額の投資が必要で、不確実性が高く失敗すれば高い財務的損失が生じるデジタル・トランスフォーメーション戦略。<br>最も恩恵を受ける組織は？",c:["リスク許容量が低く、リスク選好度が低い組織","リスク許容量が低く、リスク選好度が高い組織","リスク許容量が高く、リスク選好度が低い組織","リスク許容量が高く、リスク選好度が高い組織"],a:3,e:"正解：D。リスク許容量が高い＝失敗しにくい。リスク選好度が高い＝追求する可能性が高い。（参照：11.10.1, 表11.1）"},
 {n:18,t:"デジタル・マインドセットの主要な特徴はどれですか？",c:["あらゆる機会を使って技術ベースの変更を行うこと","技術が人々の生活や仕事の方法をどのように変えているかを理解すること","変化する状況で一般的なアクションや意思決定を自動化すること","社会の変化と組織に影響する変化を区別すること"],a:1,e:"正解：B。『技術が人々の生活や仕事の方法をどのように変えているかを理解し、組織の関連性を確保するために他者と協力すること。』A=盲目的に従うことではない。C=インテリジェント・オートメーション。（参照：9.1）"},
@@ -150,7 +158,7 @@ const QUESTIONS=[
 {n:44,t:"ソーシャルメディア企業が『展開管理』プラクティスの新ツールを導入。競合に先駆けて新機能を定期的に追加可能に。<br>これは何の例ですか？",c:["オペレーショナル・エクセレンスの達成","ポートフォリオ最適化の改善","カスタマ・ジャーニーの最適化","顧客の関連性の向上"],a:0,e:"正解：A（オペレーショナル・エクセレンスの達成）。展開管理ツールの改善はオペレーショナル・エクセレンスの例。『技術を革新的な方法で使用して、より高いレベルのパフォーマンスと品質を得る。』（参照：3.2.2）"},
 {n:45,t:"あるデバイスがデジタルデータを処理するために使用されている。<br>これは何の例ですか？",c:["デジタル技術","デジタル組織","デジタル化","デジタル・トランスフォーメーション"],a:0,e:"正解：A（デジタル技術）。『何かをデジタル化する、またはデジタルデータを処理するあらゆる技術。』（参照：2.1）"},
 {n:46,t:"デジタル・トランスフォーメーション・イニシアチブを先導するための実行可能なアプローチの例ではないものは？",c:["トランスフォーメーションの規模とステップをその範囲と目標に合わせて調整","『組織変更管理』プラクティスのコンセプトを使用","詳細なユニバーサル実装フレームワークに従う","限定された範囲内で段階的な改善を行う"],a:2,e:"正解：C。『デジタル・トランスフォーメーションを単一の実装フレームワークに還元することは、成功する可能性が非常に低く必然的に失敗につながる。』A、B、D=有効なアプローチ。（参照：6.3.4）"},
-{n:47,t:"不安定で不確実な市場で活動するサービス・プロバイダ。内外の変化に素早く適応でき、継続的に改善し、予期しない状況への計画もある。しかし新しい要件を満たすことに時々失敗。<br>注力すべき特性は？",c:["リーン","アジャイル","コンティニュアス","レジリエント"],a:2,e:"正解：C（コンティニュアス）。『消費者に製品やサービスを中断なく提供し、変化するニーズと要件に継続的に対応し、変化する環境に適応できる組織。』A=改善は実施済み。B=適応は実施済み。D=計画は実施済み。（参照：8.1.2.2）"},
+{n:47,t:"不安定で不確実な市場で活動するサービス・プロバイダ。内外の変化に素早く適応でき、継続的に改善し、予期しない状況への計画もある。しかし新しい要件を満たすことに時々失敗。<br>注力すべき特性は？",c:["リーン","アジャイル","継続性","対障害弾力性"],a:2,e:"正解：C（継続性）。『消費者に製品やサービスを中断なく提供し、変化するニーズと要件に継続的に対応し、変化する環境に適応できる組織。』A（リーン）=ワークフローの改善とムダの排除に注力→すでに実施済み。B（アジャイル）=素早い適応→すでに実施済み。D（対障害弾力性）=予期しない状況への計画→すでに実施済み。（参照：8.1.2.2）"},
 {n:48,t:"何年もかかるデジタル・トランスフォーメーション戦略に合意した組織。最初のイニシアチブのチームがビジネスケースを作成。<br>ビジネスケースの範囲は？",c:["デジタル・トランスフォーメーション全体","このチームに割り当てられた最初のイニシアチブ全体","このチームが提供するすべてのイニシアチブ","当会計年度に完了するすべてのトランスフォーメーション活動"],a:1,e:"正解：B。『戦略がイニシアチブに分割される場合、各イニシアチブにはそのイニシアチブの期間に合わせて設計されたビジネスケースを含めるべき。』（参照：5.3.4.2）"},
 {n:49,t:"サービスに対する認識の悪さで市場シェアを失っている組織。効率的な運用に投資済みだがサービス品質への苦情が継続。<br>認識改善に最も役立つコンセプトは？",c:["カスタマ・ジャーニー","オムニチャネルの提供","ポートフォリオ管理","バリューストリーム"],a:0,e:"正解：A（カスタマ・ジャーニー）。『定義されたエンドツーエンドのプロセスを通じた顧客の認識された体験。』認識の問題を理解するにはジャーニー全体を分析する必要がある。（参照：5.2.1.1）"},
 {n:50,t:"戦略の測定と評価がビジネス環境と整合していることを確保するために注力すべきは？",c:["戦略的成果","戦略の実施進捗","戦略の妥当性","戦略的ポジショニング"],a:2,e:"正解：C（戦略の妥当性）。『内外の環境の変化を考慮して、戦略がまだ妥当/適切であるかどうかを示す（妥当性）。』A=パフォーマンス測定。B=進捗測定。（参照：7.2.1）"},
@@ -174,11 +182,11 @@ function renderQuestion(){const q=quizQuestions[currentIndex],total=quizQuestion
 function selectAnswer(i){answers[currentIndex]=i;saveProgress();renderQuestion()}
 function nextQuestion(){if(currentIndex<quizQuestions.length-1){currentIndex++;renderQuestion()}else showResults()}
 function prevQuestion(){if(currentIndex>0){currentIndex--;renderQuestion()}}
-function showResults(){document.getElementById('quizArea').classList.add('hidden');const rs=document.getElementById('resultScreen');rs.classList.add('show');score=0;quizQuestions.forEach((q,i)=>{if(answers[i]===q.a)score++});const total=quizQuestions.length,pct=Math.round(score/total*100),passLine=Math.ceil(total*0.7),pass=score>=passLine;const sd=document.getElementById('scoreDisplay');sd.textContent=score+'/'+total+' ('+pct+'%)';sd.className='score-display '+(pass?'pass':'fail');document.getElementById('resultMsg').textContent=pass?'🎉 合格です！おめでとうございます！':'😢 不合格です。合格ライン: '+passLine+'/'+total+'（70%）';let d='<table style="width:100%;border-collapse:collapse"><tr style="background:#e8eaf6"><th style="padding:6px;border:1px solid #ccc">問題</th><th style="padding:6px;border:1px solid #ccc">あなた</th><th style="padding:6px;border:1px solid #ccc">正解</th><th style="padding:6px;border:1px solid #ccc">結果</th></tr>';const lb=['A','B','C','D'];quizQuestions.forEach((q,i)=>{const ua=answers[i]!==undefined?lb[answers[i]]:'未',ca=lb[q.a],ok=answers[i]===q.a;d+='<tr style="background:'+(ok?'#e8f5e9':'#ffebee')+'"><td style="padding:4px 8px;border:1px solid #ccc">Q'+String(q.n).padStart(3,'0')+'</td><td style="padding:4px 8px;border:1px solid #ccc;text-align:center">'+ua+'</td><td style="padding:4px 8px;border:1px solid #ccc;text-align:center">'+ca+'</td><td style="padding:4px 8px;border:1px solid #ccc;text-align:center">'+(ok?'✅':'❌')+'</td></tr>'});d+='</table>';document.getElementById('resultDetails').innerHTML=d;localStorage.removeItem(STORAGE_KEY)}
+function showResults(){document.getElementById('quizArea').classList.add('hidden');const rs=document.getElementById('resultScreen');rs.classList.add('show');score=0;quizQuestions.forEach((q,i)=>{if(answers[i]===q.a)score++});const total=quizQuestions.length,pct=Math.round(score/total*100),passLine=Math.ceil(total*0.7),pass=score>=passLine;const sd=document.getElementById('scoreDisplay');sd.textContent=score+'/'+total+' ('+pct+'%)';sd.className='score-display '+(pass?'pass':'fail');document.getElementById('resultMsg').textContent=pass?'🎉 合格です！おめでとうございます！':'😢 不合格です。合格ライン: '+passLine+'/'+total+'（70%）';let d='<table style="width:100%;border-collapse:collapse"><tr style="background:var(--surface2)"><th style="padding:6px;border:1px solid var(--border);color:var(--text)">問題</th><th style="padding:6px;border:1px solid var(--border);color:var(--text)">あなた</th><th style="padding:6px;border:1px solid var(--border);color:var(--text)">正解</th><th style="padding:6px;border:1px solid var(--border);color:var(--text)">結果</th></tr>';const lb=['A','B','C','D'];quizQuestions.forEach((q,i)=>{const ua=answers[i]!==undefined?lb[answers[i]]:'未',ca=lb[q.a],ok=answers[i]===q.a;d+='<tr style="background:'+(ok?'rgba(61,214,140,.08)':'rgba(245,91,91,.08)')+'"><td style="padding:4px 8px;border:1px solid var(--border);color:var(--text)">Q'+String(q.n).padStart(3,'0')+'</td><td style="padding:4px 8px;border:1px solid var(--border);text-align:center;color:var(--text)">'+ua+'</td><td style="padding:4px 8px;border:1px solid var(--border);text-align:center;color:var(--text)">'+ca+'</td><td style="padding:4px 8px;border:1px solid var(--border);text-align:center">'+(ok?'✅':'❌')+'</td></tr>'});d+='</table>';document.getElementById('resultDetails').innerHTML=d;localStorage.removeItem(STORAGE_KEY)}
 function backToMenu(){document.getElementById('resultScreen').classList.remove('show');document.getElementById('modeScreen').classList.remove('hidden');document.getElementById('quizArea').classList.add('hidden');checkResume()}
 function getModeLabel(){if(currentMode==='sp1')return'SP1';if(currentMode==='sp2')return'SP2';if(currentMode==='all')return'全問';return'ランダム20問'}
 function saveProgress(){const data={mode:currentMode,questions:quizQuestions.map(q=>q.n),answers,currentIndex,timestamp:Date.now()};localStorage.setItem(STORAGE_KEY,JSON.stringify(data));const si=document.getElementById('saveIndicator');si.classList.add('show');setTimeout(()=>si.classList.remove('show'),1500)}
-function checkResume(){const s=localStorage.getItem(STORAGE_KEY),a=document.getElementById('resumeArea');if(!s){a.innerHTML='';return}try{const d=JSON.parse(s),ans=Object.keys(d.answers||{}).length,total=d.questions.length,dt=new Date(d.timestamp).toLocaleString('ja-JP');a.innerHTML='<div style="margin:20px auto;max-width:500px;padding:16px;background:#fff3e0;border-radius:12px;text-align:center"><p style="font-weight:bold">💾 前回の続きがあります</p><p style="font-size:.9em;color:#666">回答済: '+ans+'/'+total+' | '+dt+'</p><button class="nav-btn primary" style="margin-top:12px" onclick="resumeQuiz()">続きから再開</button> <button class="nav-btn secondary" style="margin-top:12px" onclick="clearResume()">破棄</button></div>'}catch(e){a.innerHTML=''}}
+function checkResume(){const s=localStorage.getItem(STORAGE_KEY),a=document.getElementById('resumeArea');if(!s){a.innerHTML='';return}try{const d=JSON.parse(s),ans=Object.keys(d.answers||{}).length,total=d.questions.length,dt=new Date(d.timestamp).toLocaleString('ja-JP');a.innerHTML='<div style="margin:20px auto;max-width:500px;padding:16px;background:var(--surface2);border:1px solid var(--accent);border-radius:12px;text-align:center"><p style="font-weight:bold;color:var(--text)">💾 前回の続きがあります</p><p style="font-size:.9em;color:var(--text2)">回答済: '+ans+'/'+total+' | '+dt+'</p><button class="nav-btn primary" style="margin-top:12px" onclick="resumeQuiz()">続きから再開</button> <button class="nav-btn secondary" style="margin-top:12px" onclick="clearResume()">破棄</button></div>'}catch(e){a.innerHTML=''}}
 function resumeQuiz(){const s=JSON.parse(localStorage.getItem(STORAGE_KEY));currentMode=s.mode;quizQuestions=s.questions.map(n=>{const o=QUESTIONS.find(q=>q.n===n);const idx=[0,1,2,3];const sh=shuffle([...idx]);return{...o,c:sh.map(i=>o.c[i]),a:sh.indexOf(o.a)}});answers=s.answers||{};currentIndex=s.currentIndex||0;document.getElementById('modeScreen').classList.add('hidden');document.getElementById('quizArea').classList.remove('hidden');document.getElementById('resultScreen').classList.remove('show');renderQuestion()}
 function clearResume(){localStorage.removeItem(STORAGE_KEY);document.getElementById('resumeArea').innerHTML=''}
 function toggleGlossary(t){const e=document.getElementById(t==='dits'?'glossaryDits':'glossaryFnd');e.classList.toggle('show');if(e.classList.contains('show')&&!e.dataset.loaded){renderGlossary(t);e.dataset.loaded='1'}}
