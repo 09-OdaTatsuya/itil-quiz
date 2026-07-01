@@ -220,7 +220,7 @@ else idx=ALL_QUESTIONS.map(function(q,i){return i;});
 const order=(mode==='random20')?idx:shuffle(idx);
 return order.map(function(qi){return{qi:qi,co:shuffle([0,1,2]),picked:null};});
 }
-function startQuiz(mode){state={mode:mode,items:buildItems(mode),cur:0};save();show('quiz');render();}
+function startQuiz(mode){state={mode:mode,items:buildItems(mode),cur:0};save();show('quiz');render();window.scrollTo(0,0);}
 function show(v){document.getElementById('home').classList.toggle('hide',v!=='home');document.getElementById('quiz').classList.toggle('hide',v!=='quiz');document.getElementById('result').classList.toggle('hide',v!=='result');}
 function render(){
 const it=state.items[state.cur];const q=ALL_QUESTIONS[it.qi];
@@ -241,16 +241,16 @@ document.getElementById('prevBtn').disabled=state.cur===0;
 const nb=document.getElementById('nextBtn');nb.textContent=(state.cur===state.items.length-1)?'結果を見る':'次へ →';nb.disabled=it.picked===null;
 }
 function pick(p){const it=state.items[state.cur];if(it.picked!==null)return;it.picked=p;save();render();}
-function nextQ(){if(state.cur<state.items.length-1){state.cur++;render();}else{finish();}}
-function prevQ(){if(state.cur>0){state.cur--;render();}}
+function nextQ(){if(state.cur<state.items.length-1){state.cur++;render();window.scrollTo(0,0);}else{finish();window.scrollTo(0,0);}}
+function prevQ(){if(state.cur>0){state.cur--;render();window.scrollTo(0,0);}}
 function finish(){let correct=0;state.items.forEach(function(it){const q=ALL_QUESTIONS[it.qi];if(it.picked!==null&&it.co[it.picked]===q.a)correct++;});const total=state.items.length;const pct=Math.round(correct/total*100);const pass=pct>=PASS;document.getElementById('badge').innerHTML='<span class="badge '+(pass?'pass':'fail')+'">'+(pass?'合格':'不合格')+'</span>';document.getElementById('scoreText').textContent=pct+'%';document.getElementById('scoreSub').textContent=total+'問中 '+correct+'問正解（合格ライン'+PASS+'%）';state.done=true;save();show('result');}
-function reviewWrong(){const wrong=state.items.filter(function(it){const q=ALL_QUESTIONS[it.qi];return!(it.picked!==null&&it.co[it.picked]===q.a);});if(wrong.length===0){alert('全問正解です！復習する問題はありません。');return;}state={mode:'review',items:wrong.map(function(it){return{qi:it.qi,co:shuffle([0,1,2]),picked:null};}),cur:0};save();show('quiz');render();}
+function reviewWrong(){const wrong=state.items.filter(function(it){const q=ALL_QUESTIONS[it.qi];return!(it.picked!==null&&it.co[it.picked]===q.a);});if(wrong.length===0){alert('全問正解です！復習する問題はありません。');return;}state={mode:'review',items:wrong.map(function(it){return{qi:it.qi,co:shuffle([0,1,2]),picked:null};}),cur:0};save();show('quiz');render();window.scrollTo(0,0);}
 function quitQuiz(){clearS();state=null;show('home');checkResume();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
 function clearS(){try{localStorage.removeItem(KEY);}catch(e){}}
 function loadS(){try{return JSON.parse(localStorage.getItem(KEY));}catch(e){return null;}}
 function checkResume(){const s=loadS();const box=document.getElementById('resume');if(s&&s.items&&!s.done){const answered=s.items.filter(function(it){return it.picked!==null;}).length;document.getElementById('resumeText').textContent='中断中の'+(MODE_LABEL[s.mode]||'')+'があります（'+answered+'/'+s.items.length+'問回答済み）';box.classList.remove('hide');}else{box.classList.add('hide');}}
-function resumeQuiz(){const s=loadS();if(s){state=s;document.getElementById('resume').classList.add('hide');if(s.done){finish();}else{show('quiz');render();}}}
+function resumeQuiz(){const s=loadS();if(s){state=s;document.getElementById('resume').classList.add('hide');if(s.done){finish();}else{show('quiz');render();}window.scrollTo(0,0);}}
 function discardResume(){clearS();document.getElementById('resume').classList.add('hide');}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 checkResume();
